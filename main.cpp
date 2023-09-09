@@ -3,14 +3,21 @@
 #include <iostream>
 #include <vector>
 
+class Screen {
+public:
+  static const int width = 1920;
+  static const int height = 1080;
+};
+
 class Grid {
 private:
-  static const int width = 10, height = 10;
+  static const int size = 50;
+
+  static const int width = Screen::width / size;
+  static const int height = Screen::height / size;
   int grid[width][height];
 
 public:
-  const int size = 35;
-
   Grid() {
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
@@ -19,11 +26,27 @@ public:
     }
   }
 
-  void draw(sf::RenderWindow &window) {}
+  void draw(sf::RenderWindow &window) {
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        sf::RectangleShape shape = sf::RectangleShape();
+        shape.setSize(sf::Vector2f(size, size));
+        shape.setFillColor(sf::Color::White);
+        shape.setOutlineThickness(5);
+        shape.setOutlineColor(sf::Color::Black);
+
+        shape.setPosition(i * size, j * size);
+        window.draw(shape);
+      }
+    }
+  }
+
+  void setBlock() {}
 };
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(2520, 1470), "a* pathfinding");
+  sf::RenderWindow window(sf::VideoMode(Screen::width, Screen::height),
+                          "a* pathfinding");
 
   Grid grid;
 
