@@ -1,12 +1,13 @@
 #include </opt/homebrew/Cellar/sfml/2.5.1_2/include/SFML/Graphics.hpp>
 
 int main() {
-  sf::Window window(sf::VideoMode(800, 600), "a*");
+  sf::Window window(sf::VideoMode(1920, 1080), "a*");
 
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed)
+      if (event.type == sf::Event::Closed ||
+          event.key.code == sf::Keyboard::Escape)
         window.close();
     }
   }
