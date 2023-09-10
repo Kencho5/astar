@@ -1,4 +1,4 @@
-#include </opt/homebrew/Cellar/sfml/2.5.1_2/include/SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -56,6 +56,10 @@ int main() {
       if (event.type == sf::Event::Closed ||
           event.key.code == sf::Keyboard::Escape) {
         window.close();
+      }
+
+      if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        sf::Vector2i position = sf::Mouse::getPosition(window);
       }
 
       window.clear();
