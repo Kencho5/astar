@@ -7,17 +7,19 @@ class Screen {
 public:
   static const int width = 1920;
   static const int height = 1080;
+
+  static const int size = 50;
 };
 
 class Grid {
 private:
-  static const int size = 50;
-
-  static const int width = Screen::width / size;
-  static const int height = Screen::height / size;
+  static const int width = Screen::width / Screen::size;
+  static const int height = Screen::height / Screen::size;
   int grid[width][height];
 
 public:
+  int size = Screen::size;
+
   Grid() {
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
@@ -31,9 +33,20 @@ public:
       for (int j = 0; j < height; j++) {
         sf::RectangleShape shape = sf::RectangleShape();
         shape.setSize(sf::Vector2f(size, size));
-        shape.setFillColor(sf::Color::White);
         shape.setOutlineThickness(5);
         shape.setOutlineColor(sf::Color::Black);
+
+        switch (grid[i][j]) {
+        case 0:
+          shape.setFillColor(sf::Color::White);
+          break;
+        case 1:
+          shape.setFillColor(sf::Color::Blue);
+          break;
+        case 2:
+          shape.setFillColor(sf::Color::Red);
+          break;
+        }
 
         shape.setPosition(i * size, j * size);
         window.draw(shape);
@@ -41,25 +54,47 @@ public:
     }
   }
 
-  void setBlock() {}
+  void setBlock(int x, int y, int type) {
+    switch (type) {
+    case 1:
+      grid[x][y] = 1;
+      break;
+    case 2:
+      grid[x][y] = 2;
+      break;
+    }
+  }
 };
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(Screen::width, Screen::height),
-                          "a* pathfinding");
+  sf::RenderWindow window(
+      sf::VideoMode(floor(Screen::width), floor(Screen::height)),
+      "a* pathfinding");
 
   Grid grid;
+  int size = Screen::size;
+  int type;
 
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed ||
-          event.key.code == sf::Keyboard::Escape) {
-        window.close();
-      }
+      if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Escape)
+          window.close();
+        if (event.type == sf::Event::Closed)
+          window.close();
 
+        if (event.key.code == sf::Keyboard::S)
+          type = 1;
+        else if (event.key.code == sf::Keyboard::E)
+          type = 2;
+      }
       if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         sf::Vector2i position = sf::Mouse::getPosition(window);
+
+        int gridX = floor(position.x / size);
+        int gridY = floor(position.y / size);
+        grid.setBlock(gridX, gridY, type);
       }
 
       window.clear();
