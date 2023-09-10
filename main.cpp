@@ -46,6 +46,9 @@ public:
         case 2:
           shape.setFillColor(sf::Color::Red);
           break;
+        case 3:
+          shape.setFillColor(sf::Color::Black);
+          break;
         }
 
         shape.setPosition(i * size, j * size);
@@ -61,6 +64,9 @@ public:
       break;
     case 2:
       grid[x][y] = 2;
+      break;
+    case 3:
+      grid[x][y] = 3;
       break;
     }
   }
@@ -88,6 +94,8 @@ int main() {
           type = 1;
         else if (event.key.code == sf::Keyboard::E)
           type = 2;
+        else if (event.key.code == sf::Keyboard::W)
+          type = 3;
       }
       if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         sf::Vector2i position = sf::Mouse::getPosition(window);
